@@ -40,8 +40,12 @@ if (cluster.isMaster) {
     app.set('views', __dirname + '/views');
     app.use(bodyParser.urlencoded({extended:false}));
 
-    app.get('/users', function(req, res) {
-        res.send('respond with a Kamran');
+    app.get('/', function(req, res) {
+        res.render('index', {
+            static_path: 'static',
+            theme: process.env.THEME || 'flatly',
+            flask_debug: process.env.FLASK_DEBUG || 'false'
+        });
     });
 
     app.post('/signup', function(req, res) {
