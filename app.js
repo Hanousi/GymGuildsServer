@@ -41,7 +41,7 @@ if (cluster.isMaster) {
     app.use(bodyParser.urlencoded({extended:false}));
 
     app.get('/users', function(req, res) {
-        res.send('respond with a resource');
+        res.send('respond with a Kamran');
     });
 
     app.post('/signup', function(req, res) {
