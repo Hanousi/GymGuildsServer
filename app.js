@@ -26,6 +26,8 @@ if (cluster.isMaster) {
     var AWS = require('aws-sdk');
     var express = require('express');
     var bodyParser = require('body-parser');
+    var users = require('./routes/users');
+    var challenges = require('./routes/challenges');
 
     AWS.config.region = process.env.REGION
 
@@ -39,6 +41,8 @@ if (cluster.isMaster) {
     app.set('view engine', 'ejs');
     app.set('views', __dirname + '/views');
     app.use(bodyParser.urlencoded({extended:false}));
+    app.use('/users', users);
+    app.use('/challenges', challenges);
 
     app.get('/', function(req, res) {
         res.render('index', {
