@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB();
 
 /* GET users listing. */
