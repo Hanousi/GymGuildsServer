@@ -4,19 +4,22 @@ var AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB();
 
 /* GET users listing. */
-router.get('/', async function(req, res, next) {
+router.get('/', function(req, res, next) {
   const email = req.query.email;
 
-  const response = await ddb.getItem({
+  ddb.getItem({
     'TableName': 'Users',
     'Key': {
       'email': {
         S: email
       }
     }
-  })
+  }, function(err, data) {
+  if (err) console.log(err, err.stack);
+  else     res.send(data);          
+})
 
-  res.send(response);
+  res.send('Get users');
 });
 
 module.exports = router;
