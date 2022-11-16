@@ -18,8 +18,6 @@ router.get('/', function(req, res, next) {
   if (err) console.log(err, err.stack);
   else     res.send(data);          
 })
-
-  res.send('Get users');
 });
 
 module.exports = router;
