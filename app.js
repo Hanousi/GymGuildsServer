@@ -79,6 +79,8 @@ if (cluster.isMaster) {
 
         res.status(returnStatus).end();
         console.log(`DDB Error: ${err}`);
+      } else {
+        res.send('User saved');
       }
     });
   });
