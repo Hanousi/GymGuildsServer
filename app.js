@@ -30,7 +30,13 @@ if (cluster.isMaster) {
   AWS.config.region = process.env.REGION;
 
   const sns = new AWS.SNS();
-  const ddb = new AWS.DynamoDB();
+  let ddb;
+
+  if (process.env.DEV === 'True') {
+    ddb = new AWS.DynamoDB({ endpoint: new AWS.Endpoint('http://localhost:8000') });
+  } else {
+    ddb = new AWS.DynamoDB();
+  }
 
   const ddbTable = process.env.STARTUP_SIGNUP_TABLE;
   const snsTopic = process.env.NEW_SIGNUP_TOPIC;
@@ -38,6 +44,7 @@ if (cluster.isMaster) {
 
   app.set('view engine', 'ejs');
   app.set('views', `${__dirname}/views`);
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use('/users', users);
   app.use('/challenges', challenges);
@@ -59,7 +66,7 @@ if (cluster.isMaster) {
     };
 
     ddb.putItem({
-      TableName: ddbTable,
+      TableName: 'Users',
       Item: item,
       Expected: { email: { Exists: false } },
     }, (err) => {
@@ -72,22 +79,6 @@ if (cluster.isMaster) {
 
         res.status(returnStatus).end();
         console.log(`DDB Error: ${err}`);
-      } else {
-        sns.publish({
-          Message: `Name: ${req.body.name}\r\nEmail: ${req.body.email
-          }\r\nPreviewAccess: ${req.body.previewAccess
-          }\r\nTheme: ${req.body.theme}`,
-          Subject: 'New user sign up!!!',
-          TopicArn: snsTopic,
-        // eslint-disable-next-line no-shadow
-        }, (err) => {
-          if (err) {
-            res.status(500).end();
-            console.log(`SNS Error: ${err}`);
-          } else {
-            res.status(201).end();
-          }
-        });
       }
     });
   });

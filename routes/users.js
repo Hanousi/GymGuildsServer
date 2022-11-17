@@ -5,7 +5,7 @@ const router = express.Router();
 const ddb = new AWS.DynamoDB();
 
 /* GET users listing. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   const { email } = req.query;
 
   ddb.getItem({
