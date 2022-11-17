@@ -30,3 +30,15 @@ You can get started using the following steps:
     2. Enter the CNAME prefix you want to use for this environment.
   5. Once the environment creation process completes, run `eb open` to open the application in a browser.
   6. Run `eb terminate --all` to clean up.
+
+
+To start up dynamoDB;
+java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+
+To start up dynamodb GUI;
+dynamodb-admin
+
+Required ENV Vars;
+REGION=london
+DEV=True
+DYNAMO_ENDPOINT=http://localhost:8000/
