@@ -1,8 +1,7 @@
 const express = require('express');
-const AWS = require('aws-sdk');
+const { ddb } = require('../dynamo');
 
 const router = express.Router();
-const ddb = new AWS.DynamoDB();
 
 /* GET users listing. */
 router.get('/', (req, res) => {

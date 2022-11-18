@@ -22,6 +22,7 @@ if (cluster.isMaster) {
 // Code to run if we're in a worker process
 } else {
   const AWS = require('aws-sdk');
+  const { ddb } = require('./dynamo');
   const express = require('express');
   const bodyParser = require('body-parser');
   const users = require('./routes/users');
@@ -29,17 +30,6 @@ if (cluster.isMaster) {
 
   AWS.config.region = process.env.REGION;
 
-  const sns = new AWS.SNS();
-  let ddb;
-
-  if (process.env.DEV === 'True') {
-    ddb = new AWS.DynamoDB({ endpoint: new AWS.Endpoint('http://localhost:8000') });
-  } else {
-    ddb = new AWS.DynamoDB();
-  }
-
-  const ddbTable = process.env.STARTUP_SIGNUP_TABLE;
-  const snsTopic = process.env.NEW_SIGNUP_TOPIC;
   const app = express();
 
   app.set('view engine', 'ejs');
