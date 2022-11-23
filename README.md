@@ -42,3 +42,7 @@ Required ENV Vars;
 REGION=london
 DEV=True
 DYNAMO_ENDPOINT=http://localhost:8000/
+
+Local Tables
+
+aws dynamodb create-table --cli-input-json file://create-table-movies.json --endpoint-url http://localhost:8000/
