@@ -1,48 +1,61 @@
-# AWS Elastic Beanstalk Express Sample App
-This sample application uses the [Express](https://expressjs.com/) framework and [Bootstrap](http://getbootstrap.com/) to build a simple, scalable customer signup form that is deployed to [AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/). The application stores data in [Amazon DynamoDB](http://aws.amazon.com/dynamodb/) and publishes notifications to the [Amazon Simple Notification Service (SNS)](http://aws.amazon.com/sns/) when a customer fills out the form.
+# Node Web Application boilerplate
 
-## Features
-### Themes
-The code includes several Bootstrap themes from [bootswatch.com](http://bootswatch.com/). You can dynamically change the active theme by setting the THEME environment variable in the [Elastic Beanstalk Management Console](https://console.aws.amazon.com/elasticbeanstalk):
+A boilerplate for **Node.js** web applications. This boilerplate gives the basic stucture of application start with while bundling enough useful features so as to remove all those redundant tasks that can derail a project before it even really gets started. This boilerplate users Express with sequelize as ORM and MySQL as database.
 
-![](misc/theme-flow.png)
+### Prerequisites
 
-Installed themes include:
+1. ```NodeJs```
+2. ```NPM```
+3. ```MySQL```
 
-* [amelia](http://bootswatch.com/amelia)
-* [default](http://bootswatch.com/default)
-* [flatly](http://bootswatch.com/flatly)
-* [slate](http://bootswatch.com/slate)
-* [united](http://bootswatch.com/united)
+### Quick start
 
-You can get started using the following steps:
-  1. [Install the AWS Elastic Beanstalk Command Line Interface (CLI)](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
-  2. Create an IAM Instance Profile named **aws-elasticbeanstalk-sample-role** with the policy in [iam_policy.json](iam_policy.json). For more information on how to create an IAM Instance Profile, see [Create an IAM Instance Profile for Your Amazon EC2 Instances](https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-create-iam-instance-profile.html).
-  3. Run `eb init -r <region> -p "Node.js"` to initialize the folder for use with the CLI. Replace `<region>` with a region identifier such as `us-west-2` (see [Regions and Endpoints](https://docs.amazonaws.cn/en_us/general/latest/gr/rande.html#elasticbeanstalk_region) for a full list of region identifiers). For interactive mode, run `eb init` then,
-    1. Pick a region of your choice.
-    2. Select the **[ Create New Application ]** option.
-    3. Enter the application name of your choice.
-    4. Answer **yes** to *It appears you are using Node.js. Is this correct?*.
-    7. Choose whether you want SSH access to the Amazon EC2 instances.  
-      *Note: If you choose to enable SSH and do not have an existing SSH key stored on AWS, the EB CLI requires ssh-keygen to be available on the path to generate SSH keys.*  
-  4. Run `eb create --instance_profile aws-elasticbeanstalk-sample-role` to begin the creation of your environment.
-    1. Enter the environment name of your choice.
-    2. Enter the CNAME prefix you want to use for this environment.
-  5. Once the environment creation process completes, run `eb open` to open the application in a browser.
-  6. Run `eb terminate --all` to clean up.
+1. Clone the repository with `git clone https://github.com/mangya/node-express-mysql-boilerplate.git <your_project_folder_name>`
+2. Change directory to your project folder `cd <your_project_folder_name>`
+3. Install the dependencies with `npm install`
+4. Create database in MySQL.
+5. Update the your database name and credentials in the `.env` file.
+6. Run the application with `npm start` (MySQL service should be up and running).
+7. Access `http://localhost:3000` and you're ready to go!
 
+### Folder Structure
+```
+.
+├── app/
+│   ├── controllers/           # Controllers
+│   ├── middlewares/           # Middlewares
+│   ├── models/                # Express database models
+├── config/
+├── public/                    
+│   ├── css/                   # Stylesheets
+│   ├── js/                     
+│	├── fonts/                 
+│   ├── images/
+├── .env                       # API keys, passwords, and other sensitive information
+├── routes/                    # Route definitions
+├── views/                     # All view files
+├── index.js                   # Express application
+└── package.json               # NPM Dependencies and scripts
+```
 
-To start up dynamoDB;
-java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+## Packages used
+* [nodemon](https://github.com/remy/nodemon) — tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+* [bcryptjs](https://github.com/dcodeIO/bcrypt.js) — encryption library to hash a password
+* [body-parser](https://github.com/expressjs/body-parser) — Node.js body parsing middleware. Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+* [express-flash](https://github.com/RGBboy/express-flash) — middleware to store flash messages in the session.
+* [connect-session-sequelize](https://github.com/mweibel/connect-session-sequelize) — SQL session store using Sequelize.js
+* [csurf](https://github.com/expressjs/csurf) — Middleware for CSRF token creation and validation. Requires session middleware to be initialized first. We have used `express-session`
+* [dotenv](https://github.com/motdotla/dotenv) — module to load environment variables from a .env file
+* [express](https://github.com/visionmedia/express) — web application framework for node
+* [express-handlebars](https://github.com/express-handlebars/express-handlebars) — Template engine
+* [express-session](https://github.com/expressjs/session) — Module to create a session middleware. Required for `csurf`.
+* [validator](https://github.com/validatorjs/validator.js) — A library of string validators and sanitizers.
+* [mysql2](https://github.com/sidorares/node-mysql2) — MySQL client for Node.js. Required for Sequelize. 
+* [sequelize](https://github.com/sequelize/sequelize) — Sequelize is a promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.
 
-To start up dynamodb GUI;
-dynamodb-admin
+## Readings
+* [How to Architect a Node.Js Project](https://dev.to/shadid12/how-to-architect-a-node-js-project-from-ground-up-1n22)
 
-Required ENV Vars;
-REGION=london
-DEV=True
-DYNAMO_ENDPOINT=http://localhost:8000/
+## Contributing
 
-Local Tables
-
-aws dynamodb create-table --cli-input-json file://create-table-movies.json --endpoint-url http://localhost:8000/
+This boilerplate is open to suggestions and contributions, documentation contributions are also welcome! 😊
