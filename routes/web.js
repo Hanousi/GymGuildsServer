@@ -14,5 +14,6 @@ router.post('/sign-up', AuthController.signUp);
 router.get('/forgot-password', AuthController.forgotPasswordPage);
 router.post('/forgot-password', AuthController.forgotPassword);
 router.post('/challenge', ChallengeController.createChallenge);
+router.post('/challenge/user', ChallengeController.addUserToChallenge);
 
 module.exports = router;

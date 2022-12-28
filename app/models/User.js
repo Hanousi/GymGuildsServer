@@ -1,13 +1,13 @@
-const bcrypt = require('bcryptjs');
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
+const ChallengeUser = require('./ChallengeUser');
 
 const User = sequelize.define(
   'users',
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+    userId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
@@ -29,7 +29,7 @@ const User = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
-  	},
+  },
   {
     indexes: [
       // Create a unique index on email
@@ -39,5 +39,7 @@ const User = sequelize.define(
       }],
   },
 );
+
+User.hasMany(ChallengeUser, { foreignKey: 'userId' });
 
 module.exports = User;
