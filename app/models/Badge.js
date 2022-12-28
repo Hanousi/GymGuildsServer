@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
 
 const Badge = sequelize.define('badge', {
-  badgeID: {
+  badgeId: {
     type: DataTypes.UUID,
     defualtValue: DataTypes.UUIDV4,
     primaryKey: true,
