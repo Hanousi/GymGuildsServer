@@ -38,17 +38,28 @@ exports.createChallenge = async (req, res) => {
 };
 
 exports.addUserToChallenge = async (req, res) => {
-  const challengeUser = await ChallengeUser.findOne({
+  const existingChallengeUser = await ChallengeUser.findOne({
     where: {
       challengeId: req.body.challengeId,
       userId: req.body.userId,
     },
   });
 
-  if (!challengeUser) {
-    
+  if (!existingChallengeUser) {
+    const challengeUser = new ChallengeUser({
+      challengeId: req.body.challengeId,
+      userId: req.body.userId,
+    });
+
+    try {
+      await challengeUser.save();
+    } catch (e) {
+      console.log(e);
+    }
+
+    return res.send('User added to challenge');
   }
 
-  console.log(challengeUser);
-  res.send(challengeUser);
+  res.status(400);
+  return res.send('User already participating in challenge');
 };
