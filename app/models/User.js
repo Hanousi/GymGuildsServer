@@ -10,6 +10,7 @@ const User = sequelize.define('users', {
 			primaryKey: true
 		},
 		fullName: DataTypes.STRING,
+		points: DataTypes.INTEGER,
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false

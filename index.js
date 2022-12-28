@@ -59,7 +59,7 @@ app.use(errorController.pageNotFound);
 
 sequelize
 	//.sync({force : true})
-	.sync()
+	.sync({alter : true})
 	.then(() => {
 		app.listen(process.env.PORT);
 		//pending set timezone
