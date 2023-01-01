@@ -1,12 +1,14 @@
 const Friends = require('../models/Friends');
 const User = require('../models/User');
+const Banner = require('../models/Banner');
+const Challenge = require('../models/Challenges');
 
 exports.getUser = async (req, res) => {
   const user = await User.findOne({
     where: {
       userId: req.params.userId,
     },
-    include: {
+    include: [{
       model: User,
       as: 'myFriends',
       attributes: [
@@ -16,7 +18,12 @@ exports.getUser = async (req, res) => {
       order: [
         [{ model: User, as: 'myFriends' }, Friends, 'points', 'DESC'],
       ],
+    }, {
+      model: Banner,
     },
+    {
+      model: Challenge,
+    }],
   });
 
   res.send(user);
