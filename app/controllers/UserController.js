@@ -6,6 +6,7 @@ const Banner = require('../models/Banner');
 const Challenge = require('../models/Challenges');
 const UserStat = require('../models/UserStats');
 const Badge = require('../models/Badge');
+const FriendRequest = require('../models/FriendRequest');
 
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
@@ -25,13 +26,28 @@ exports.getUser = async (req, res) => {
         'fullName',
         'points',
       ],
+      required: false,
+    },
+    {
+      model: FriendRequest,
+      as: 'recievedFriendRequests',
+      where: {
+        status: 0,
+      },
+      include: [{
+        model: User,
+      }],
+      required: false,
     },
     {
       model: Banner,
+      required: false,
     },
     {
       model: Challenge,
-    }, {
+      required: false,
+    },
+    {
       model: UserStat,
       group: 'statName',
       attributes: {
@@ -49,6 +65,7 @@ exports.getUser = async (req, res) => {
     },
     {
       model: Badge,
+      required: false,
     }],
   });
 

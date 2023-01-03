@@ -8,6 +8,7 @@ const FriendsController = require('../app/controllers/FriendsController');
 const UserController = require('../app/controllers/UserController');
 const BannerController = require('../app/controllers/BannerController');
 const BadgeController = require(('../app/controllers/BadgeController'));
+const RequestController = require(('../app/controllers/RequestController'));
 
 router.get('/', HomeController.homePage);
 router.get('/login', AuthController.loginPage);
@@ -27,5 +28,6 @@ router.post('/banner/user', BannerController.unlockBannerForUser);
 router.put('/user/:userId/addStat', UserController.addUserStat);
 router.post('/badge', BadgeController.addBadge);
 router.post('/badge/user', BadgeController.unlockBadgeForUser);
+router.post('/friendRequest', RequestController.createFriendRequest);
 
 module.exports = router;
