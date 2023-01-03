@@ -1,9 +1,16 @@
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 const Friends = require('../models/Friends');
 const User = require('../models/User');
 const Banner = require('../models/Banner');
 const Challenge = require('../models/Challenges');
+const UserStat = require('../models/UserStats');
 
 exports.getUser = async (req, res) => {
+  const todaysStart = new Date().setHours(0, 0, 0, 0);
+  const now = new Date();
+
   const user = await User.findOne({
     where: {
       userId: req.params.userId,
@@ -23,6 +30,21 @@ exports.getUser = async (req, res) => {
     },
     {
       model: Challenge,
+    }, {
+      model: UserStat,
+      group: 'statName',
+      attributes: {
+        include: [
+          [Sequelize.fn('MAX', Sequelize.col('value')), 'mostRecent'],
+        ],
+      },
+      where: {
+        createdAt: {
+          [Op.gt]: todaysStart,
+          [Op.lt]: now,
+        },
+      },
+      required: false,
     }],
   });
 
@@ -47,4 +69,21 @@ exports.addPoints = async (req, res) => {
   }
 
   res.send('Points added!');
+};
+
+exports.updateStat = async (req, res) => {
+  const newUserStat = new UserStat({
+    userId: req.params.userId,
+    statName: req.body.statName,
+    value: req.body.value,
+  });
+
+  try {
+    await newUserStat.save();
+  } catch (e) {
+    console.log(e);
+    return res.status(500);
+  }
+
+  return res.send('User stat added');
 };

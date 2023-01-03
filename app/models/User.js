@@ -5,6 +5,7 @@ const ChallengeUser = require('./ChallengeUser');
 const Friends = require('./Friends');
 const Banner = require('./Banner');
 const Challenge = require('./Challenges');
+const UserStat = require('./UserStats');
 
 const User = sequelize.define(
   'users',
@@ -50,12 +51,12 @@ const User = sequelize.define(
   },
 );
 
-User.hasMany(ChallengeUser, { foreignKey: 'userId' });
 User.belongsToMany(User, { as: 'myFriends', through: Friends, foreignKey: 'userId' });
 User.belongsToMany(User, { as: 'friend', through: Friends, foreignKey: 'friendId' });
 User.belongsToMany(Banner, { through: BannerUser, foreignKey: 'userId' });
 Banner.belongsToMany(User, { through: BannerUser, foreignKey: 'bannerId' });
 User.belongsToMany(Challenge, { through: ChallengeUser, foreignKey: 'userId' });
 Challenge.belongsToMany(User, { through: ChallengeUser, foreignKey: 'challengeId' });
+User.hasMany(UserStat, { foreignKey: 'userId' });
 
 module.exports = User;
