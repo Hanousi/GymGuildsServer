@@ -1,13 +1,16 @@
-const Friends = require('../models/Friends');
 const User = require('../models/User');
 const Banner = require('../models/Banner');
 const Challenge = require('../models/Challenges');
+const Badge = require('../models/Badge');
 
 exports.getUser = async (req, res) => {
   const user = await User.findOne({
     where: {
       userId: req.params.userId,
     },
+    order: [
+      [{ model: User, as: 'myFriends' }, 'points', 'DESC'],
+    ],
     include: [{
       model: User,
       as: 'myFriends',
@@ -15,14 +18,15 @@ exports.getUser = async (req, res) => {
         'fullName',
         'points',
       ],
-      order: [
-        [{ model: User, as: 'myFriends' }, Friends, 'points', 'DESC'],
-      ],
-    }, {
+    },
+    {
       model: Banner,
     },
     {
       model: Challenge,
+    },
+    {
+      model: Badge,
     }],
   });
 

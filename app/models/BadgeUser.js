@@ -2,9 +2,9 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
 
 const BadgeUser = sequelize.define('badgeUser', {
-  userBadgeID: {
+  userBadgeId: {
     type: DataTypes.UUID,
-    defualtValue: DataTypes.UUIDV4,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   badgeId: DataTypes.UUID,
