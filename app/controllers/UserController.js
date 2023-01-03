@@ -7,6 +7,7 @@ const Challenge = require('../models/Challenges');
 const UserStat = require('../models/UserStats');
 const Badge = require('../models/Badge');
 const FriendRequest = require('../models/FriendRequest');
+const ChallengeRequest = require('../models/ChallengeRequest');
 
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
@@ -36,6 +37,17 @@ exports.getUser = async (req, res) => {
       },
       include: [{
         model: User,
+      }],
+      required: false,
+    },
+    {
+      model: ChallengeRequest,
+      as: 'recievedChallengeRequests',
+      where: {
+        status: 0,
+      },
+      include: [{
+        model: Challenge,
       }],
       required: false,
     },

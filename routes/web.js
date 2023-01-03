@@ -29,5 +29,8 @@ router.put('/user/:userId/addStat', UserController.addUserStat);
 router.post('/badge', BadgeController.addBadge);
 router.post('/badge/user', BadgeController.unlockBadgeForUser);
 router.post('/friendRequest', RequestController.createFriendRequest);
+router.put('/friendRequest/:friendRequestId', RequestController.updateFriendRequest);
+router.post('/challengeRequest', RequestController.createChallengeRequest);
+router.put('/challengeRequest/:challengeRequestId', RequestController.updateChallengeRequest);
 
 module.exports = router;
