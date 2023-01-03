@@ -24,7 +24,7 @@ router.get('/user/:userId', UserController.getUser);
 router.put('/user/:userId/points', UserController.addPoints);
 router.post('/banner', BannerController.addBanner);
 router.post('/banner/user', BannerController.unlockBannerForUser);
-router.put('/user/:userId/addStat', UserController.updateStat);
+router.put('/user/:userId/addStat', UserController.addUserStat);
 router.post('/badge', BadgeController.addBadge);
 router.post('/badge/user', BadgeController.unlockBadgeForUser);
 

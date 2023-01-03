@@ -75,15 +75,21 @@ exports.addPoints = async (req, res) => {
   res.send('Points added!');
 };
 
-exports.updateStat = async (req, res) => {
-  const newUserStat = new UserStat({
-    userId: req.params.userId,
-    statName: req.body.statName,
-    value: req.body.value,
+exports.addUserStat = async (req, res) => {
+  const promises = [];
+  req.body.forEach((stat) => {
+    const newUserStat = new UserStat({
+      userId: req.params.userId,
+      statName: stat.statName,
+      value: stat.value,
+    });
+
+    const promise = newUserStat.save();
+    promises.push(promise);
   });
 
   try {
-    await newUserStat.save();
+    await Promise.all(promises);
   } catch (e) {
     console.log(e);
     return res.status(500);
