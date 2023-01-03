@@ -7,6 +7,7 @@ const ChallengeController = require('../app/controllers/ChallengeController');
 const FriendsController = require('../app/controllers/FriendsController');
 const UserController = require('../app/controllers/UserController');
 const BannerController = require('../app/controllers/BannerController');
+const BadgeController = require(('../app/controllers/BadgeController'));
 
 router.get('/', HomeController.homePage);
 router.get('/login', AuthController.loginPage);
@@ -24,5 +25,7 @@ router.put('/user/:userId/points', UserController.addPoints);
 router.post('/banner', BannerController.addBanner);
 router.post('/banner/user', BannerController.unlockBannerForUser);
 router.put('/user/:userId/addStat', UserController.updateStat);
+router.post('/badge', BadgeController.addBadge);
+router.post('/badge/user', BadgeController.unlockBadgeForUser);
 
 module.exports = router;

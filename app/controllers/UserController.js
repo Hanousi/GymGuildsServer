@@ -6,6 +6,7 @@ const User = require('../models/User');
 const Banner = require('../models/Banner');
 const Challenge = require('../models/Challenges');
 const UserStat = require('../models/UserStats');
+const Badge = require('../models/Badge');
 
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
@@ -15,6 +16,9 @@ exports.getUser = async (req, res) => {
     where: {
       userId: req.params.userId,
     },
+    order: [
+      [{ model: User, as: 'myFriends' }, 'points', 'DESC'],
+    ],
     include: [{
       model: User,
       as: 'myFriends',
@@ -22,10 +26,8 @@ exports.getUser = async (req, res) => {
         'fullName',
         'points',
       ],
-      order: [
-        [{ model: User, as: 'myFriends' }, Friends, 'points', 'DESC'],
-      ],
-    }, {
+    },
+    {
       model: Banner,
     },
     {
@@ -45,6 +47,9 @@ exports.getUser = async (req, res) => {
         },
       },
       required: false,
+    },
+    {
+      model: Badge,
     }],
   });
 
