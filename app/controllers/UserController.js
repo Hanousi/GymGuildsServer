@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
-const Friends = require('../models/Friends');
 const User = require('../models/User');
 const Banner = require('../models/Banner');
 const Challenge = require('../models/Challenges');

@@ -67,4 +67,6 @@ Challenge.belongsToMany(User, { through: ChallengeUser, foreignKey: 'challengeId
 User.belongsToMany(Badge, { through: BadgeUser, foreignKey: 'userId' });
 Badge.belongsToMany(User, { through: BadgeUser, foreignKey: 'badgeId' });
 
+User.hasMany(UserStat, { foreignKey: 'userId' });
+
 module.exports = User;
