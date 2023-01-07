@@ -13,6 +13,7 @@ const PointsUser = require('../models/Points');
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
   const now = new Date();
+  const isoNow = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
   const user = await User.findOne({
     where: {
@@ -42,10 +43,24 @@ exports.getUser = async (req, res) => {
     },
     {
       model: PointsUser,
+      attributes:
+      [
+        [Sequelize.fn('COUNT', Sequelize.col('pointsUsers.points')), 'total_points'],
+      ],
       where: {
         createdAt: {
-          [Op.gt]: todaysStart,
-          [Op.lt]: now,
+          [Op.gt]: Sequelize.literal(`(
+            Select guilds.seasons.seasonStart 
+            From guilds.seasons 
+            where guilds.seasons.seasonStart < '${isoNow}'
+            and guilds.seasons.seasonEnd > '${isoNow}'
+        )`),
+          [Op.lt]: Sequelize.literal(`(
+            Select guilds.seasons.seasonEnd
+            From guilds.seasons 
+            where guilds.seasons.seasonStart < '${isoNow}'
+            and guilds.seasons.seasonEnd > '${isoNow}'
+        )`),
         },
       },
       required: false,

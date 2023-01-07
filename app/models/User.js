@@ -21,6 +21,7 @@ const User = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    location: DataTypes.GEOMETRY,
     fullName: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,

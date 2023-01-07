@@ -7,8 +7,8 @@ const ChallengeController = require('../app/controllers/ChallengeController');
 const FriendsController = require('../app/controllers/FriendsController');
 const UserController = require('../app/controllers/UserController');
 const BannerController = require('../app/controllers/BannerController');
-const BadgeController = require(('../app/controllers/BadgeController'));
-const RequestController = require(('../app/controllers/RequestController'));
+const BadgeController = require('../app/controllers/BadgeController');
+const RequestController = require('../app/controllers/RequestController');
 
 router.get('/', HomeController.homePage);
 router.get('/login', AuthController.loginPage);
