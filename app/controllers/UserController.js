@@ -13,100 +13,75 @@ const PointsUser = require('../models/Points');
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
   const now = new Date();
-  const isoNow = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
-  const user = await User.findOne({
-    where: {
-      userId: req.params.userId,
-    },
-    // order: [
-    //   [{ model: User, as: 'myFriends' }, 'points', 'DESC'],
-    // ],
-    include: [{
-      model: User,
-      as: 'myFriends',
-      attributes: [
-        'fullName',
-      ],
-      required: false,
-    },
-    {
-      model: FriendRequest,
-      as: 'recievedFriendRequests',
+  try {
+    const user = await User.findOne({
       where: {
-        status: 0,
+        userId: req.params.userId,
       },
+      order: [
+        [{ model: User, as: 'myFriends' }, 'points', 'DESC'],
+      ],
       include: [{
         model: User,
-      }],
-      required: false,
-    },
-    {
-      model: PointsUser,
-      attributes:
-      [
-        [Sequelize.fn('COUNT', Sequelize.col('pointsUsers.points')), 'total_points'],
-      ],
-      where: {
-        createdAt: {
-          [Op.gt]: Sequelize.literal(`(
-            Select guilds.seasons.seasonStart 
-            From guilds.seasons 
-            where guilds.seasons.seasonStart < '${isoNow}'
-            and guilds.seasons.seasonEnd > '${isoNow}'
-        )`),
-          [Op.lt]: Sequelize.literal(`(
-            Select guilds.seasons.seasonEnd
-            From guilds.seasons 
-            where guilds.seasons.seasonStart < '${isoNow}'
-            and guilds.seasons.seasonEnd > '${isoNow}'
-        )`),
+        as: 'myFriends',
+        attributes: [
+          'fullName',
+          'points',
+        ],
+        required: false,
+      },
+      {
+        model: FriendRequest,
+        as: 'recievedFriendRequests',
+        where: {
+          status: 0,
         },
+        include: [{
+          model: User,
+        }],
+        required: false,
       },
-      required: false,
-    },
-    {
-      model: ChallengeRequest,
-      as: 'recievedChallengeRequests',
-      where: {
-        status: 0,
+      {
+        model: ChallengeRequest,
+        as: 'recievedChallengeRequests',
+        where: {
+          status: 0,
+        },
+        include: [{
+          model: Challenge,
+        }],
+        required: false,
       },
-      include: [{
+      {
+        model: Banner,
+        required: false,
+      },
+      {
         model: Challenge,
-      }],
-      required: false,
-    },
-    {
-      model: Banner,
-      required: false,
-    },
-    {
-      model: Challenge,
-      required: false,
-    },
-    {
-      model: UserStat,
-      group: 'statName',
-      // attributes: {
-      //   include: [
-      //     [Sequelize.fn('MAX', Sequelize.col('value')), 'mostRecent'],
-      //   ],
-      // },
-      where: {
-        createdAt: {
-          [Op.gt]: todaysStart,
-          [Op.lt]: now,
-        },
+        required: false,
       },
-      required: false,
-    },
-    {
-      model: Badge,
-      required: false,
-    }],
-  });
+      {
+        model: UserStat,
+        group: 'statName',
+        where: {
+          createdAt: {
+            [Op.gt]: todaysStart,
+            [Op.lt]: now,
+          },
+        },
+        required: false,
+      },
+      {
+        model: Badge,
+        required: false,
+      }],
+    });
 
-  res.send(user);
+    res.send(user);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 exports.addUserStat = async (req, res) => {
@@ -180,14 +155,26 @@ exports.addUserStat = async (req, res) => {
     } catch (e) {
       console.log(e);
     }
+  } else {
+    existingPointsUser.points = calcPoints;
 
-    return res.send('User points updated');
+    try {
+      await existingPointsUser.save();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  existingPointsUser.points = calcPoints;
+  const user = await User.findOne({
+    where: {
+      userId: req.params.userId,
+    },
+  });
+
+  user.points += calcPoints;
 
   try {
-    await existingPointsUser.save();
+    await user.save();
   } catch (e) {
     console.log(e);
   }

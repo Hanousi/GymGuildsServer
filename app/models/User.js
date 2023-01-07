@@ -23,6 +23,10 @@ const User = sequelize.define(
     },
     location: DataTypes.GEOMETRY,
     fullName: DataTypes.STRING,
+    points: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
