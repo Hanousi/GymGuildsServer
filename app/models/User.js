@@ -10,7 +10,7 @@ const Badge = require('./Badge');
 const BadgeUser = require('./BadgeUser');
 const FriendRequest = require('./FriendRequest');
 const ChallengeRequest = require('./ChallengeRequest');
-const PointsUser = require('./Points');
+const PointsUser = require('./PointsUsers');
 
 const User = sequelize.define(
   'users',

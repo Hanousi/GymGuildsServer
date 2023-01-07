@@ -8,7 +8,7 @@ const UserStat = require('../models/UserStats');
 const Badge = require('../models/Badge');
 const FriendRequest = require('../models/FriendRequest');
 const ChallengeRequest = require('../models/ChallengeRequest');
-const PointsUser = require('../models/Points');
+const PointsUser = require('../models/PointsUsers');
 
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
