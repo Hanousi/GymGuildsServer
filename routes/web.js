@@ -7,8 +7,9 @@ const ChallengeController = require('../app/controllers/ChallengeController');
 const FriendsController = require('../app/controllers/FriendsController');
 const UserController = require('../app/controllers/UserController');
 const BannerController = require('../app/controllers/BannerController');
-const BadgeController = require('../app/controllers/BadgeController');
-const RequestController = require('../app/controllers/RequestController');
+const BadgeController = require(('../app/controllers/BadgeController'));
+const RequestController = require(('../app/controllers/RequestController'));
+const SearchController = require(('../app/controllers/SearchController'));
 
 router.get('/', HomeController.homePage);
 router.get('/login', AuthController.loginPage);
@@ -31,5 +32,7 @@ router.post('/friendRequest', RequestController.createFriendRequest);
 router.put('/friendRequest/:friendRequestId', RequestController.updateFriendRequest);
 router.post('/challengeRequest', RequestController.createChallengeRequest);
 router.put('/challengeRequest/:challengeRequestId', RequestController.updateChallengeRequest);
+router.get('/search/:input', SearchController.searchFriendsAndChallenges);
+router.get('/search/:userId/location', SearchController.searchByLocation);
 
 module.exports = router;
