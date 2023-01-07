@@ -10,6 +10,7 @@ const Badge = require('./Badge');
 const BadgeUser = require('./BadgeUser');
 const FriendRequest = require('./FriendRequest');
 const ChallengeRequest = require('./ChallengeRequest');
+const PointsUser = require('./PointsUsers');
 
 const User = sequelize.define(
   'users',
@@ -73,5 +74,8 @@ FriendRequest.belongsTo(User, { foreignKey: 'fromUserId' });
 
 User.hasMany(ChallengeRequest, { foreignKey: 'toUserId', as: 'recievedChallengeRequests' });
 ChallengeRequest.belongsTo(Challenge, { foreignKey: 'challengeId' });
+
+User.hasMany(PointsUser, { foreignKey: 'userId' });
+PointsUser.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = User;

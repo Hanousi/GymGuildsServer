@@ -23,7 +23,6 @@ router.post('/challenge', ChallengeController.createChallenge);
 router.post('/challenge/user', ChallengeController.addUserToChallenge);
 router.post('/friends', FriendsController.addFriend);
 router.get('/user/:userId', UserController.getUser);
-router.put('/user/:userId/points', UserController.addPoints);
 router.post('/banner', BannerController.addBanner);
 router.post('/banner/user', BannerController.unlockBannerForUser);
 router.put('/user/:userId/addStat', UserController.addUserStat);
