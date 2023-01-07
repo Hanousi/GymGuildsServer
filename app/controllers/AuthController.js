@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const User = require('../models/User');
 const Session = require('../models/Session');
+const sequelize = require('sequelize');
 
 const message = (req) => {
   let message = req.flash('error');
@@ -108,14 +109,17 @@ exports.signUp = (req, res, next) => {
             fullName: req.body.name,
             email: req.body.email,
             password: hashedPassword,
+            location: req.body.longitude && req.body.latitude
+              ? sequelize.fn('ST_GeomFromText', `Point(${req.body.longitude} ${req.body.latitude})`, 4269)
+              : null,
           });
           return user.save();
         })
-        .then((result) => res.redirect('/login'));
+        .then((result) => res.send('User Created'));
     }
     req.flash('error', 'E-Mail exists already, please pick a different one.');
     req.flash('oldInput', { name: req.body.name });
-    return res.redirect('/sign-up');
+    return res.send('E-Mail exists already, please pick a different one.');
   })
     .catch((err) => console.log(err));
 };

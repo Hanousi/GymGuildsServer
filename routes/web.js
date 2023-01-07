@@ -34,5 +34,6 @@ router.put('/friendRequest/:friendRequestId', RequestController.updateFriendRequ
 router.post('/challengeRequest', RequestController.createChallengeRequest);
 router.put('/challengeRequest/:challengeRequestId', RequestController.updateChallengeRequest);
 router.get('/search/:input', SearchController.searchFriendsAndChallenges);
+router.get('/search/:userId/location', SearchController.searchByLocation);
 
 module.exports = router;
