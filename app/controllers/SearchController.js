@@ -31,6 +31,28 @@ exports.searchFriendsAndChallenges = async (req, res) => {
 
 exports.searchByLocation = async (req, res) => {
   try {
+    const user = await User.findOne({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+
+    user.location = Sequelize.fn('ST_GeomFromText', `Point(${req.query.longitude} ${req.query.latitude})`, 4269);
+
+    try {
+      await user.save();
+    } catch (e) {
+      console.log(e);
+      res.status(500);
+      return res.send('Something went wrong');
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(404);
+    return res.send('User not found');
+  }
+
+  try {
     const results = await User.findAll({
       where: {
         [Op.not]: {
@@ -49,8 +71,10 @@ exports.searchByLocation = async (req, res) => {
       },
     });
 
-    res.send(results);
+    return res.send(results);
   } catch (e) {
     console.log(e);
+    res.status(500);
+    return res.send('Something went wrong');
   }
 };
