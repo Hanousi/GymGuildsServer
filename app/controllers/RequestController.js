@@ -1,5 +1,7 @@
 const ChallengeRequest = require('../models/ChallengeRequest');
+const ChallengeUser = require('../models/ChallengeUser');
 const FriendRequest = require('../models/FriendRequest');
+const Friends = require('../models/Friends');
 
 exports.createFriendRequest = async (req, res) => {
   const [_request, created] = await FriendRequest.findOrCreate({
@@ -34,6 +36,20 @@ exports.updateFriendRequest = async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(500);
+  }
+
+  if (friendRequest.status === '1') {
+    const friendAccepted = new Friends({
+      userId: friendRequest.fromUserId,
+      friendId: friendRequest.toUserId,
+    });
+
+    try {
+      await friendAccepted.save();
+    } catch (e) {
+      console.log(e);
+      return res.status(500);
+    }
   }
 
   return res.send('Request updated');
@@ -73,6 +89,20 @@ exports.updateChallengeRequest = async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(500);
+  }
+
+  if (challengeRequest.status === '1') {
+    const challengeAccepted = new ChallengeUser({
+      userId: challengeRequest.toUserId,
+      challengeId: challengeRequest.challengeId,
+    });
+
+    try {
+      await challengeAccepted.save();
+    } catch (e) {
+      console.log(e);
+      return res.status(500);
+    }
   }
 
   return res.send('Request updated');
