@@ -11,6 +11,8 @@ const Challenge = sequelize.define('challenges', {
   challengeName: DataTypes.STRING,
   calorieGoal: DataTypes.INTEGER,
   exerciseGoal: DataTypes.INTEGER,
+  startDate: DataTypes.DATE,
+  endDate: DataTypes.DATE,
 });
 
 Challenge.hasMany(ChallengeUser, { foreignKey: 'challengeId' });

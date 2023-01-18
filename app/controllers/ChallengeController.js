@@ -1,7 +1,43 @@
 const { v4: uuidv4 } = require('uuid');
+const Sequelize = require('sequelize');
+
 const Challenge = require('../models/Challenges');
 const ChallengeUser = require('../models/ChallengeUser');
 const User = require('../models/User');
+
+exports.getChallenge = async (req, res) => {
+  try {
+    const challenge = await Challenge.findOne({
+      where: {
+        challengeId: req.params.challengeId,
+      },
+      include: [{
+        model: User,
+        attributes: {
+          include: [
+            [
+              // This is susceptible to cross site
+              Sequelize.literal(`(
+                      SELECT SUM(points)
+                      FROM pointsUsers AS PointsUsers
+                      WHERE
+                      PointsUsers.userId = users.userId AND
+                      PointsUsers.createdAt > (SELECT startDate FROM challenges WHERE challengeId = '${req.params.challengeId}') AND
+                      PointsUsers.createdAt < (SELECT endDate FROM challenges WHERE challengeId = '${req.params.challengeId}')
+                  )`),
+              'challengePoints',
+            ],
+          ],
+        },
+      }],
+    });
+
+    return res.send(challenge);
+  } catch (e) {
+    console.log(e);
+    return res.send('oops');
+  }
+};
 
 exports.createChallenge = async (req, res) => {
   const user = await User.findOne({
@@ -21,6 +57,8 @@ exports.createChallenge = async (req, res) => {
     challengeName: req.body.challengeName,
     calorieGoal: req.body.calorieGoal,
     exerciseGoal: req.body.exerciseGoal,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
   });
 
   const challengeUser = new ChallengeUser({

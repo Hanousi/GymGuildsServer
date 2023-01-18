@@ -42,8 +42,8 @@ exports.login = (req, res, next) => {
   if (!validator.isEmail(req.body.inputEmail)) validationErrors.push('Please enter a valid email address.');
   if (validator.isEmpty(req.body.inputPassword)) validationErrors.push('Password cannot be blank.');
   if (validationErrors.length) {
-    req.flash('error', validationErrors);
-    return res.redirect('/login');
+    res.status(400);
+    return res.send(validationErrors);
   }
   User.findOne({
     where: {
@@ -52,30 +52,29 @@ exports.login = (req, res, next) => {
   }).then((user) => {
     if (user) {
       bcrypt
-        .compare(req.body.inputPassword, user.password)
+        .compare(req.body.inputPassword, user.dataValues.password)
         .then((doMatch) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
 			            req.session.user = user.dataValues;
-			            return req.session.save((err) => {
-              console.log(err);
-              res.redirect('/');
-			            });
+			        //     return req.session.save((err) => {
+              // console.log(err);
+              // res.send(user);
+			        //     });
+              return res.send(user);
           }
-          req.flash('error', 'Invalid email or password.');
-          req.flash('oldInput', { email: req.body.inputEmail });
-          return res.redirect('/login');
+          console.log(1111111111);
+          res.status(400);
+          return res.send('Incorrect login details');
         })
         .catch((err) => {
           console.log(err);
-          req.flash('error', 'Sorry! Somethig went wrong.');
-          req.flash('oldInput', { email: req.body.inputEmail });
-          return res.redirect('/login');
+          res.status(500);
+          return res.send('A unexpected error occured');
         });
     } else {
-      req.flash('error', 'No user found with this email');
-      req.flash('oldInput', { email: req.body.inputEmail });
-      return res.redirect('/login');
+      res.status(500);
+      return res.send('A unexpected error occured');
     }
   })
     .catch((err) => console.log(err));
