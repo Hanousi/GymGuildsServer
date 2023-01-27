@@ -120,6 +120,7 @@ exports.addUserStat = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
+    console.log(req.body);
     res.status(400);
     return res.send('Body is in wrong format');
   }
