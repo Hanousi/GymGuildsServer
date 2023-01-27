@@ -89,34 +89,40 @@ exports.addUserStat = async (req, res) => {
   const now = new Date();
   const promises = [];
 
-  req.body.forEach(async (stat) => {
-    const existingUserStat = await UserStat.findOne({
-      where: {
-        createdAt: {
-          [Op.gt]: todaysStart,
-          [Op.lt]: now,
+  try {
+    req.body.forEach(async (stat) => {
+      const existingUserStat = await UserStat.findOne({
+        where: {
+          createdAt: {
+            [Op.gt]: todaysStart,
+            [Op.lt]: now,
+          },
+          userId: req.params.userId,
+          statName: stat.statName,
         },
-        userId: req.params.userId,
-        statName: stat.statName,
-      },
-    });
-
-    if (!existingUserStat) {
-      const newUserStat = new UserStat({
-        userId: req.params.userId,
-        statName: stat.statName,
-        value: stat.value,
       });
 
-      const promise = newUserStat.save();
-      promises.push(promise);
-    } else {
-      existingUserStat.value = stat.value;
+      if (!existingUserStat) {
+        const newUserStat = new UserStat({
+          userId: req.params.userId,
+          statName: stat.statName,
+          value: stat.value,
+        });
 
-      const promise = existingUserStat.save();
-      promises.push(promise);
-    }
-  });
+        const promise = newUserStat.save();
+        promises.push(promise);
+      } else {
+        existingUserStat.value = stat.value;
+
+        const promise = existingUserStat.save();
+        promises.push(promise);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400);
+    return res.send('Body is in wrong format');
+  }
 
   try {
     await Promise.all(promises);
