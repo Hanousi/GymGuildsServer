@@ -151,6 +151,12 @@ exports.addUserStat = async (req, res) => {
     },
   });
 
+  const user = await User.findOne({
+    where: {
+      userId: req.params.userId,
+    },
+  });
+
   if (!existingPointsUser) {
     const pointsUser = new PointsUser({
       points: calcPoints,
@@ -162,8 +168,13 @@ exports.addUserStat = async (req, res) => {
     } catch (e) {
       console.log(e);
     }
+
+    user.points += calcPoints;
   } else {
+    const pointsDiff = calcPoints - existingPointsUser.points;
     existingPointsUser.points = calcPoints;
+
+    user.points += pointsDiff;
 
     try {
       await existingPointsUser.save();
@@ -171,14 +182,6 @@ exports.addUserStat = async (req, res) => {
       console.log(e);
     }
   }
-
-  const user = await User.findOne({
-    where: {
-      userId: req.params.userId,
-    },
-  });
-
-  user.points += calcPoints;
 
   try {
     await user.save();
