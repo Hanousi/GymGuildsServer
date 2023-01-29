@@ -174,7 +174,9 @@ exports.addUserStat = async (req, res) => {
     const pointsDiff = calcPoints - existingPointsUser.points;
     existingPointsUser.points = calcPoints;
 
-    user.points += pointsDiff;
+    if (pointsDiff > 0) {
+      user.points += pointsDiff;
+    }
 
     try {
       await existingPointsUser.save();
