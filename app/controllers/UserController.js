@@ -136,7 +136,7 @@ exports.addUserStat = async (req, res) => {
   req.body.forEach((stat) => {
     if (stat.statName === 'Calories Burned') {
       calcPoints += parseInt(stat.value, 10);
-    } else if (stat.statName === 'Minutes excerised') {
+    } else if (stat.statName === 'Minutes Exercised') {
       calcPoints += (parseInt(stat.value, 10) * 5);
     }
   });
