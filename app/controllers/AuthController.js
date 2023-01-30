@@ -56,16 +56,16 @@ exports.login = (req, res, next) => {
         .then((doMatch) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
-			            req.session.user = user.dataValues;
-			        //     return req.session.save((err) => {
-              // console.log(err);
-              // res.send(user);
-			        //     });
-              return res.send(user);
+            req.session.user = user.dataValues;
+            //     return req.session.save((err) => {
+            // console.log(err);
+            // res.send(user);
+            //     });
+            return res.send(user);
           }
           console.log(1111111111);
           res.status(400);
-          return res.send('Incorrect login details');
+          return res.send(['Incorrect login details']);
         })
         .catch((err) => {
           console.log(err);
