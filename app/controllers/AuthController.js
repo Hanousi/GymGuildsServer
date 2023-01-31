@@ -43,7 +43,7 @@ exports.login = (req, res, next) => {
   if (validator.isEmpty(req.body.inputPassword)) validationErrors.push('Password cannot be blank.');
   if (validationErrors.length) {
     res.status(400);
-    return res.send(validationErrors);
+    return res.send({ Errors: validationErrors });
   }
   User.findOne({
     where: {
@@ -63,9 +63,8 @@ exports.login = (req, res, next) => {
             //     });
             return res.send(user);
           }
-          console.log(1111111111);
           res.status(400);
-          return res.send(['Incorrect login details']);
+          return res.send({ Errors: ['Incorrect login details'] });
         })
         .catch((err) => {
           console.log(err);
