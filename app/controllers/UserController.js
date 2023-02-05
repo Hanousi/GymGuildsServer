@@ -9,6 +9,7 @@ const Badge = require('../models/Badge');
 const FriendRequest = require('../models/FriendRequest');
 const ChallengeRequest = require('../models/ChallengeRequest');
 const PointsUser = require('../models/PointsUsers');
+const Border = require('../models/Border');
 
 exports.getUser = async (req, res) => {
   const todaysStart = new Date().setHours(0, 0, 0, 0);
@@ -30,6 +31,14 @@ exports.getUser = async (req, res) => {
           'points',
         ],
         required: false,
+      },
+      {
+        model: Banner,
+        as: 'chosenBanner',
+      },
+      {
+        model: Border,
+        as: 'chosenBorder',
       },
       {
         model: FriendRequest,
@@ -55,6 +64,7 @@ exports.getUser = async (req, res) => {
       },
       {
         model: Banner,
+        as: 'unlockedBanners',
         required: false,
       },
       {

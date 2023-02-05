@@ -4,6 +4,7 @@ const BannerUser = require('./BannerUser');
 const ChallengeUser = require('./ChallengeUser');
 const Friends = require('./Friends');
 const Banner = require('./Banner');
+const Border = require('./Border');
 const Challenge = require('./Challenges');
 const UserStat = require('./UserStats');
 const Badge = require('./Badge');
@@ -20,6 +21,18 @@ const User = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
+    },
+    selectedBanner: {
+      type: DataTypes.UUID,
+      defaultValue: 'be2c1ed7-532c-47b9-a3e2-a3f2f5fa7303',
+    },
+    selectedBorder: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    avatar: {
+      type: DataTypes.STRING,
+      defaultValue: 'https://elasticbeanstalk-eu-west-2-061012721712.s3.eu-west-2.amazonaws.com/assets/avatar1.png',
     },
     points: {
       type: DataTypes.INTEGER,
@@ -62,7 +75,7 @@ User.hasMany(ChallengeUser, { foreignKey: 'userId' });
 User.belongsToMany(User, { as: 'myFriends', through: Friends, foreignKey: 'userId' });
 User.belongsToMany(User, { as: 'friend', through: Friends, foreignKey: 'friendId' });
 
-User.belongsToMany(Banner, { through: BannerUser, foreignKey: 'userId' });
+User.belongsToMany(Banner, { through: BannerUser, foreignKey: 'userId', as: 'unlockedBanners' });
 Banner.belongsToMany(User, { through: BannerUser, foreignKey: 'bannerId' });
 
 User.belongsToMany(Challenge, { through: ChallengeUser, foreignKey: 'userId' });
@@ -81,5 +94,11 @@ ChallengeRequest.belongsTo(Challenge, { foreignKey: 'challengeId' });
 
 User.hasMany(PointsUser, { foreignKey: 'userId' });
 PointsUser.belongsTo(User, { foreignKey: 'userId' });
+
+Banner.hasMany(User, { foreignKey: 'selectedBanner' });
+User.belongsTo(Banner, { foreignKey: 'selectedBanner', as: 'chosenBanner' });
+
+Border.hasMany(User, { foreignKey: 'selectedBorder' });
+User.belongsTo(Border, { foreignKey: 'selectedBorder', as: 'chosenBorder' });
 
 module.exports = User;

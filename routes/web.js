@@ -10,6 +10,7 @@ const BannerController = require('../app/controllers/BannerController');
 const BadgeController = require(('../app/controllers/BadgeController'));
 const RequestController = require(('../app/controllers/RequestController'));
 const SearchController = require(('../app/controllers/SearchController'));
+const BorderController = require('../app/controllers/BorderController');
 
 router.get('/', HomeController.homePage);
 router.get('/login', AuthController.loginPage);
@@ -26,6 +27,7 @@ router.get('/user/:userId', UserController.getUser);
 router.get('/challenge/:challengeId', ChallengeController.getChallenge);
 router.post('/banner', BannerController.addBanner);
 router.post('/banner/user', BannerController.unlockBannerForUser);
+router.post('/border', BorderController.addBorder);
 router.put('/user/:userId/addStat', UserController.addUserStat);
 router.post('/badge', BadgeController.addBadge);
 router.post('/badge/user', BadgeController.unlockBadgeForUser);
