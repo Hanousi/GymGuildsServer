@@ -26,9 +26,15 @@ exports.getUser = async (req, res) => {
       include: [{
         model: User,
         as: 'myFriends',
-        attributes: [
-          'fullName',
-          'points',
+        include: [
+          {
+            model: Banner,
+            as: 'chosenBanner',
+          },
+          {
+            model: Border,
+            as: 'chosenBorder',
+          },
         ],
         required: false,
       },
