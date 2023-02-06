@@ -22,6 +22,8 @@ exports.getUser = async (req, res) => {
       },
       order: [
         [{ model: User, as: 'myFriends' }, 'points', 'DESC'],
+        [{ model: Challenge, as: 'activeChallenges' }, 'endDate'],
+        [{ model: Challenge, as: 'expiredChallenges' }, 'endDate', 'DESC'],
       ],
       include: [{
         model: User,
@@ -75,7 +77,35 @@ exports.getUser = async (req, res) => {
       },
       {
         model: Challenge,
+        as: 'activeChallenges',
         required: false,
+        include: [
+          {
+            model: User,
+            as: 'challengeParticipants',
+          },
+        ],
+        where: {
+          endDate: {
+            [Op.gt]: now,
+          },
+        },
+      },
+      {
+        model: Challenge,
+        as: 'expiredChallenges',
+        required: false,
+        include: [
+          {
+            model: User,
+            as: 'challengeParticipants',
+          },
+        ],
+        where: {
+          endDate: {
+            [Op.lt]: now,
+          },
+        },
       },
       {
         model: UserStat,

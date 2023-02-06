@@ -13,6 +13,7 @@ exports.getChallenge = async (req, res) => {
       },
       include: [{
         model: User,
+        as: 'challengeParticipants',
         attributes: {
           include: [
             [
@@ -21,7 +22,7 @@ exports.getChallenge = async (req, res) => {
                       SELECT SUM(points)
                       FROM pointsUsers AS PointsUsers
                       WHERE
-                      PointsUsers.userId = users.userId AND
+                      PointsUsers.userId = challengeParticipants.userId AND
                       PointsUsers.createdAt > (SELECT startDate FROM challenges WHERE challengeId = '${req.params.challengeId}') AND
                       PointsUsers.createdAt < (SELECT endDate FROM challenges WHERE challengeId = '${req.params.challengeId}')
                   )`),
@@ -57,7 +58,7 @@ exports.createChallenge = async (req, res) => {
     challengeName: req.body.challengeName,
     calorieGoal: req.body.calorieGoal,
     exerciseGoal: req.body.exerciseGoal,
-    startDate: req.body.startDate,
+    startDate: new Date(),
     endDate: req.body.endDate,
   });
 

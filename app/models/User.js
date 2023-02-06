@@ -78,8 +78,11 @@ User.belongsToMany(User, { as: 'friend', through: Friends, foreignKey: 'friendId
 User.belongsToMany(Banner, { through: BannerUser, foreignKey: 'userId', as: 'unlockedBanners' });
 Banner.belongsToMany(User, { through: BannerUser, foreignKey: 'bannerId' });
 
-User.belongsToMany(Challenge, { through: ChallengeUser, foreignKey: 'userId' });
-Challenge.belongsToMany(User, { through: ChallengeUser, foreignKey: 'challengeId' });
+User.belongsToMany(Challenge, { through: ChallengeUser, foreignKey: 'userId', as: 'activeChallenges' });
+Challenge.belongsToMany(User, { through: ChallengeUser, foreignKey: 'challengeId', as: 'challengeParticipants' });
+
+User.belongsToMany(Challenge, { through: ChallengeUser, foreignKey: 'userId', as: 'expiredChallenges' });
+Challenge.belongsToMany(User, { through: ChallengeUser, foreignKey: 'challengeId', as: 'challengeParticipant' });
 
 User.belongsToMany(Badge, { through: BadgeUser, foreignKey: 'userId' });
 Badge.belongsToMany(User, { through: BadgeUser, foreignKey: 'badgeId' });

@@ -8,6 +8,10 @@ const Challenge = sequelize.define('challenges', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
+  image: {
+    type: DataTypes.STRING,
+    defaultValue: 'https://elasticbeanstalk-eu-west-2-061012721712.s3.eu-west-2.amazonaws.com/assets/boris.jpeg',
+  },
   challengeName: DataTypes.STRING,
   calorieGoal: DataTypes.INTEGER,
   exerciseGoal: DataTypes.INTEGER,
