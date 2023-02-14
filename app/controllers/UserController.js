@@ -215,6 +215,7 @@ exports.addUserStat = async (req, res) => {
       console.log(e);
     }
 
+    user.xp += calcPoints;
     user.points += calcPoints;
   } else {
     const pointsDiff = calcPoints - existingPointsUser.points;
@@ -222,6 +223,7 @@ exports.addUserStat = async (req, res) => {
 
     if (pointsDiff > 0) {
       user.points += pointsDiff;
+      user.xp += pointsDiff;
     }
 
     try {
