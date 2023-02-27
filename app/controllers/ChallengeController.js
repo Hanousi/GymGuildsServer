@@ -1,9 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const Sequelize = require('sequelize');
 
+const { Op } = Sequelize;
 const Challenge = require('../models/Challenges');
 const ChallengeUser = require('../models/ChallengeUser');
 const User = require('../models/User');
+const PointsUser = require('../models/PointsUsers');
 
 exports.getChallenge = async (req, res) => {
   try {
@@ -29,6 +31,15 @@ exports.getChallenge = async (req, res) => {
               'challengePoints',
             ],
           ],
+        },
+        include: {
+          model: PointsUser,
+          where: {
+            createdAt: {
+              [Op.gt]: Sequelize.literal(`(SELECT startDate FROM challenges WHERE challengeId = '${req.params.challengeId}')`),
+              [Op.lt]: Sequelize.literal(`(SELECT endDate FROM challenges WHERE challengeId = '${req.params.challengeId}')`),
+            },
+          },
         },
       }],
     });
