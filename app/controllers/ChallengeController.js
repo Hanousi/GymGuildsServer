@@ -14,7 +14,7 @@ exports.getChallenge = async (req, res) => {
         challengeId: req.params.challengeId,
       },
       order: [
-        [{ model: User, as: 'challengeParticipants' }, PointsUser, 'createdAt', 'DESC'],
+        [{ model: User, as: 'challengeParticipants' }, PointsUser, 'createdAt', 'ASC'],
       ],
       include: [{
         model: User,
