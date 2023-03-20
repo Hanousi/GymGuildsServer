@@ -22,6 +22,7 @@ router.get('/forgot-password', AuthController.forgotPasswordPage);
 router.post('/forgot-password', AuthController.forgotPassword);
 router.post('/challenge', ChallengeController.createChallenge);
 router.post('/challenge/user', ChallengeController.addUserToChallenge);
+router.post('/challenge/restart/:challengeId', ChallengeController.restartChallenge);
 router.post('/friends', FriendsController.addFriend);
 router.get('/user/:userId', UserController.getUser);
 router.get('/challenge/:challengeId', ChallengeController.getChallenge);

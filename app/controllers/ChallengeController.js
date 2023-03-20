@@ -66,6 +66,35 @@ exports.getChallenge = async (req, res) => {
   }
 };
 
+exports.restartChallenge = async (req, res) => {
+  const challenge = await Challenge.findOne({
+    where: {
+      challengeId: req.params.challengeId,
+    },
+  });
+
+  const newStartDate = new Date();
+  const newEndDate = new Date();
+  newStartDate.setUTCHours(0, 0, 0, 0);
+  newEndDate.setUTCHours(0, 0, 0, 0);
+
+  // Add a week to the date
+  newEndDate.setDate(newEndDate.getDate() + 7);
+
+  challenge.startDate = newStartDate;
+  challenge.endDate = newEndDate;
+
+  try {
+    await challenge.save();
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    res.send('Something went wrong!');
+  }
+
+  res.send('Update Complete');
+};
+
 exports.createChallenge = async (req, res) => {
   const user = await User.findOne({
     where: {
