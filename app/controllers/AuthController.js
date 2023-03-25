@@ -117,6 +117,7 @@ exports.signUp = (req, res, next) => {
     }
     req.flash('error', 'E-Mail exists already, please pick a different one.');
     req.flash('oldInput', { name: req.body.name });
+    res.status(400);
     return res.send({ error: 'E-Mail exists already, please pick a different one.' });
   })
     .catch((err) => console.log(err));
