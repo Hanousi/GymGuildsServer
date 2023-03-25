@@ -24,11 +24,11 @@ const User = sequelize.define(
     },
     selectedBanner: {
       type: DataTypes.UUID,
-      defaultValue: 'be2c1ed7-532c-47b9-a3e2-a3f2f5fa7303',
+      defaultValue: 'a79d81dd-da24-43a6-9f39-16207c719ee1',
     },
     selectedBorder: {
       type: DataTypes.UUID,
-      allowNull: true,
+      defaultValue: '403a741e-a566-4ce0-a82a-c11f5ef54274',
     },
     avatar: {
       type: DataTypes.STRING,

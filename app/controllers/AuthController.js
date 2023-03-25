@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require('uuid');
+
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
@@ -94,6 +96,8 @@ exports.signUpPage = (req, res, next) => {
 };
 
 exports.signUp = (req, res, next) => {
+  const userId = uuidv4();
+
   User.findOne({
     where: {
       email: req.body.email,
@@ -104,6 +108,7 @@ exports.signUp = (req, res, next) => {
         .hash(req.body.password, 12)
         .then((hashedPassword) => {
           const user = new User({
+            userId,
             fullName: req.body.name,
             email: req.body.email,
             password: hashedPassword,
@@ -113,7 +118,7 @@ exports.signUp = (req, res, next) => {
           });
           return user.save();
         })
-        .then((result) => res.send('User Created'));
+        .then((result) => res.send({ userId }));
     }
     req.flash('error', 'E-Mail exists already, please pick a different one.');
     req.flash('oldInput', { name: req.body.name });
