@@ -108,7 +108,7 @@ exports.signUp = (req, res, next) => {
             email: req.body.email,
             password: hashedPassword,
             location: req.body.longitude && req.body.latitude
-              ? sequelize.fn('ST_GeomFromText', `Point(${req.body.longitude} ${req.body.latitude})`, 4269)
+              ? sequelize.fn('ST_GeomFromText', `Point(${req.body.latitude} ${req.body.longitude})`, 4326)
               : null,
           });
           return user.save();

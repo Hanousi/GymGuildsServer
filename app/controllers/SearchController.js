@@ -37,7 +37,7 @@ exports.searchByLocation = async (req, res) => {
       },
     });
 
-    user.location = Sequelize.fn('ST_GeomFromText', `Point(${req.query.longitude} ${req.query.latitude})`, 4269);
+    user.location = Sequelize.fn('ST_GeomFromText', `Point(${req.query.longitude} ${req.query.latitude})`, 4326);
 
     try {
       await user.save();
@@ -61,7 +61,7 @@ exports.searchByLocation = async (req, res) => {
         $and: Sequelize.where(
           Sequelize.fn(
             'ST_Distance',
-            Sequelize.fn('ST_GeomFromText', `Point(${req.query.longitude} ${req.query.latitude})`, 4269),
+            Sequelize.fn('ST_GeomFromText', `Point(${req.query.longitude} ${req.query.latitude})`, 4326),
             Sequelize.col('location'),
             'metre',
           ),
