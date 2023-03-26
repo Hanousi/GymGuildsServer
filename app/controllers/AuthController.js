@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const axios = require('axios');
 
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
@@ -118,7 +119,15 @@ exports.signUp = (req, res, next) => {
           });
           return user.save();
         })
-        .then((result) => res.send({ userId }));
+        .then((result) => {
+          axios.post('http://GuildServer-dev.eu-west-2.elasticbeanstalk.com/friends', {
+            userId,
+            friendId: userId,
+          }).then((response) => res.send({ userId })).catch((error) => {
+            // handle error
+            console.log(error);
+          });
+        });
     }
     req.flash('error', 'E-Mail exists already, please pick a different one.');
     req.flash('oldInput', { name: req.body.name });

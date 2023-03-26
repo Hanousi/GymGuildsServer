@@ -13,15 +13,17 @@ exports.addFriend = async (req, res) => {
     return res.send('Users are already friends');
   }
 
-  const otherFriend = new Friends({
-    userId: req.body.friendId,
-    friendId: req.body.userId,
-  });
+  if (req.body.friendId !== req.body.userId) {
+    const otherFriend = new Friends({
+      userId: req.body.friendId,
+      friendId: req.body.userId,
+    });
 
-  try {
-    await otherFriend.save();
-  } catch (e) {
-    console.log(e);
+    try {
+      await otherFriend.save();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return res.send('Friendship made!');
